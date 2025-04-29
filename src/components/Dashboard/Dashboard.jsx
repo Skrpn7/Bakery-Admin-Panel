@@ -23,7 +23,6 @@ const Dashboard = () => {
 
   const fetchOrders = async () => {
     try {
-    debugger
       const response = await axios.get(`${Backend_Url}/OrderDetail`);
       setOrders(response.data.Result);
     } catch (error) {
@@ -71,6 +70,9 @@ const Dashboard = () => {
     TotalAmount: parseFloat(order.TotalAmount),
   }));
 
+  // 💰 Calculate Grand Total
+  const grandTotal = filteredOrders.reduce((sum, order) => sum + parseFloat(order.TotalAmount), 0);
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Dashboard</h2>
@@ -116,6 +118,12 @@ const Dashboard = () => {
         {/* Bar Chart */}
         <div style={{ flex: "1 1 600px", height: 400 }}>
           <h3>Total Sales (₹)</h3>
+          
+          {/* Grand Total Display */}
+          <div style={{ marginBottom: "10px", fontWeight: "bold", fontSize: "18px" }}>
+            Grand Total: ₹ {grandTotal.toFixed(2)}
+          </div>
+
           <ResponsiveContainer>
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
